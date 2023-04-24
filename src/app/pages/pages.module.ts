@@ -13,6 +13,7 @@ import { AppRoutingModule } from '../app-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromesasComponent } from './promesas/promesas.component';
 
 
 
@@ -22,14 +23,16 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
     Grafica1Component,
     ProgressComponent,
     PagesComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    PromesasComponent
   ],
   exports:[
     DashboardComponent,
     AccountSettingsComponent,
     Grafica1Component,
     ProgressComponent,
-    PagesComponent
+    PagesComponent,
+    ProgressComponent
   ],
   imports: [
     CommonModule,
