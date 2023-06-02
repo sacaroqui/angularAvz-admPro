@@ -4,3 +4,13 @@
 .cursor {
     cursor: pointer;
 }
+
+.container-img {
+    display: flex;
+    justify-content: center;
+}
+
+.img-previa {
+    width: 150px;
+    height: 150px;
+}
