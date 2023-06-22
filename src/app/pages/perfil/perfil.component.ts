@@ -15,6 +15,7 @@ export class PerfilComponent implements OnInit {
   public perfilForm!:FormGroup;
   public usuario:Usuario;
   public imagen!:File;
+  public noCambioEmail=false;
   public imagenTemp:any=null;
   constructor(private fb:FormBuilder,
               private usuarioService:UsuarioService,

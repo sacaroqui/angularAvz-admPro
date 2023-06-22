@@ -2,12 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { catchError, map, tap} from 'rxjs/operators';
-
-import { RegisterForm } from '../interfaces/register-form.interface';
-import { LoginForm } from '../interfaces/login-form.interface';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+
+import { RegisterForm } from '../interfaces/register-form.interface';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
+import { LoginForm } from '../interfaces/login-form.interface';
+
 import { Usuario } from '../models/usuario.model';
+
 
 
 declare const google:any;
@@ -73,6 +76,12 @@ export class UsuarioService {
     return this.usuario.uid;
   }
 
+  get headers(){
+    return {
+      'x-token': this.token
+    }
+  }
+
   validarToken():Observable<boolean>{
     // const token = localStorage.getItem('token') || '';
     return this.http.get(`${base_url}/login/renew`,{
@@ -97,6 +106,41 @@ export class UsuarioService {
     google.accounts.id.revoke('sacariqui@gmail.com',()=>{
       this.router.navigateByUrl('/login');
 
+    })
+
+  }
+
+  cargarUsuarios(desde:number){
+    //http://localhost:3000/api/usuarios?desde=0
+    const url=`${base_url}/usuarios?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url,{headers:this.headers})
+                    .pipe(
+                      map(resp =>{
+                        // console.log(resp);
+                        const usuarios= resp.usuarios.map(user=> new Usuario(user.nombre,user.email,'',user.role, user.img,user.google,user.uid))
+                        return {
+                          total:resp.total,
+                          usuarios
+                        }
+                      })
+                    )
+  }
+
+  eliminarUsuario(usuario:Usuario){
+    //http://localhost:3000/api/usuarios/644ae3a4ab62ac419378a98b
+    
+    const url=`${base_url}/usuarios/${usuario.uid}`;
+    // return console.log('eliminando');
+    return this.http.delete(url,{headers:this.headers});
+  }
+
+  actualizarRole(usuario:Usuario){
+    //http://localhost:3000/api/usuarios/644ade2562e3ecd60309ed57
+    
+    return this.http.put(`${base_url}/usuarios/${usuario.uid}`,usuario, {
+      headers:{
+        'x-token':this.token
+      }
     })
 
   }
